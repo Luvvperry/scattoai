@@ -908,7 +908,13 @@ ${userTextDescription}`
 
     // Quality first: the lite model is retained only as a recovery path because
     // it tends to satisfy the template while compressing the physical evidence.
-    const MODELS_CASCADE = ['gemini-3.8-flash', 'gemini-3.1-flash-lite'];
+    const MODELS_CASCADE = [
+      'gemini-3.8-flash',
+      'gemini-3.1-flash-lite',
+      'gemini-3.8-flash',
+      'gemini-3.1-flash-lite',
+      'gemini-3.8-flash'
+    ];
     let lastError: any = null;
 
     for (let attempt = 0; attempt < MODELS_CASCADE.length; attempt++) {
@@ -1107,7 +1113,7 @@ ${parsed[expansionKey]}`
           console.warn(`[GENERATE] Attempt ${attempt + 1} with model ${currentModel} failed: ${cleanErrorMessage(err)}`);
         }
         if (attempt < MODELS_CASCADE.length - 1) {
-          await wait(750 * (attempt + 1));
+          await wait(Math.min(1500 * (attempt + 1), 6000));
           continue;
         }
         break;
@@ -1116,7 +1122,7 @@ ${parsed[expansionKey]}`
 
     const isQuota = isRateLimit(lastError);
     const clientMsg = cleanErrorMessage(lastError);
-    return res.status(isQuota ? 429 : 500).json({ error: clientMsg });
+    return res.status(isQuota ? 429 : (isTransientError(lastError) ? 503 : 500)).json({ error: clientMsg });
   } catch (error: any) {
     const isQuota = isRateLimit(error);
     const clientMsg = cleanErrorMessage(error);
