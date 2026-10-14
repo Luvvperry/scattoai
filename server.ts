@@ -1112,6 +1112,9 @@ ${parsed[expansionKey]}`
         } else {
           console.warn(`[GENERATE] Attempt ${attempt + 1} with model ${currentModel} failed: ${cleanErrorMessage(err)}`);
         }
+        // A 429 é quota/rate limit, não indisponibilidade de um modelo.
+        // Não tentar novamente aqui: repetir a chamada só aumenta o consumo e prolonga o bloqueio.
+        if (isRateLimit(err)) break;
         if (attempt < MODELS_CASCADE.length - 1) {
           await wait(Math.min(1500 * (attempt + 1), 6000));
           continue;

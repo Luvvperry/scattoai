@@ -312,8 +312,8 @@ export function PromptGenerator({ currentLanguage = "es", onLanguageChange }: Pr
       saveToHistory(imagePreviewUrl || "", selectedPrompt, textIdea || customInstructions, selectedPreset);
     } catch (err: any) {
       const msg = err.message || "";
-      if (msg.includes("503") || msg.includes("UNAVAILABLE") || msg.includes("high demand") || msg.includes("RESOURCE_EXHAUSTED")) {
-        setError(promptLanguage === "es" ? "El servidor de IA está experimentando alta demanda momentánea. Por favor intenta de nuevo." : promptLanguage === "pt" ? "O servidor de IA está enfrentando alta demanda momentânea. Por favor tente novamente." : "The AI server is experiencing temporary high demand. Please try again.");
+      if (msg.includes("429") || msg.includes("rate limit") || msg.includes("cuota") || msg.includes("RESOURCE_EXHAUSTED")) {
+        setError(promptLanguage === "es" ? "Se alcanzó el límite temporal de la API de IA. Espera un momento antes de volver a intentarlo." : promptLanguage === "pt" ? "O limite temporário da API de IA foi atingido. Aguarde um momento antes de tentar novamente." : "The temporary AI API limit was reached. Please wait a moment before trying again.");
       } else {
         setError(msg || (promptLanguage === "es" ? "Ocurrió un error inesperado al generar el prompt." : promptLanguage === "pt" ? "Ocorreu um erro inesperado ao gerar o prompt." : "An unexpected error occurred while generating the prompt."));
       }
@@ -353,8 +353,8 @@ export function PromptGenerator({ currentLanguage = "es", onLanguageChange }: Pr
       saveToHistory(imagePreviewUrl || "", data.refined || data.prompt || editExistingPrompt, `[Edit] ${editRequestedChanges}`, selectedPreset);
     } catch (err: any) {
       const msg = err.message || "";
-      if (msg.includes("503") || msg.includes("UNAVAILABLE") || msg.includes("high demand") || msg.includes("RESOURCE_EXHAUSTED")) {
-        setError(promptLanguage === "es" ? "El servidor de IA está experimentando alta demanda momentánea. Por favor intenta de nuevo." : promptLanguage === "pt" ? "O servidor de IA está enfrentando alta demanda momentânea. Por favor tente novamente." : "The AI server is experiencing temporary high demand. Please try again.");
+      if (msg.includes("429") || msg.includes("rate limit") || msg.includes("cuota") || msg.includes("RESOURCE_EXHAUSTED")) {
+        setError(promptLanguage === "es" ? "Se alcanzó el límite temporal de la API de IA. Espera un momento antes de volver a intentarlo." : promptLanguage === "pt" ? "O limite temporário da API de IA foi atingido. Aguarde um momento antes de tentar novamente." : "The temporary AI API limit was reached. Please wait a moment before trying again.");
       } else {
         setError(msg || (promptLanguage === "es" ? "Ocurrió un error inesperado al actualizar el prompt." : promptLanguage === "pt" ? "Ocorreu um erro inesperado ao atualizar o prompt." : "An unexpected error occurred while updating the prompt."));
       }
